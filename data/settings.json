@@ -1,0 +1,9 @@
+{
+    "screen_width": 100,
+    "screen_height": 100,
+    "tilesheet": "data/dejavu10x10_gs_tc.png",
+    "tilesheet_width": 32,
+    "tilesheet_height": 8,
+    "title": "RoguePy",
+    "vsync": true
+}
