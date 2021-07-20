@@ -10,8 +10,9 @@ import random
 class Tilemap (Entity):
     def __init__ (self, game, center_x : int, center_y : int, width : int, height : int):
         super().__init__()
+        self.tilemap = Tilemap.generate_tilemap(width, height, 0.55, 8, 4, 5)
         self.add_component(Position(center_x, center_y))
-        self.add_component(EntityMap(game, self.get_component(Position), width, height, EntityMap.MAPTYPE_MULTIMAP([SolidTile(), GrassTile()], Tilemap.generate_tilemap(width, height, 0.55, 8, 4, 5))))
+        self.add_component(EntityMap(game, self.get_component(Position), width, height, EntityMap.MAPTYPE_MULTIMAP([SolidTile(), GrassTile()], self.tilemap)))
     
     @staticmethod
     def generate_tilemap (width : int, height : int, initial_alive_chance : float, step_count: int, starvation_count : int, birth_count : int, seed: int or None = random.randint(-100000, 100000)):
@@ -42,6 +43,7 @@ class Tilemap (Entity):
                 else:
                     tilemap.append(1)
 
+        # Run Simulation Steps
         for _ in range(step_count):
             new_tilemap = list()
 
@@ -61,8 +63,53 @@ class Tilemap (Entity):
                             new_tilemap.append(1)
             tilemap = new_tilemap
 
-        # Run Simulation Steps
-        # Find the Caves
+        found_caves = Tilemap.get_areas_from_tilemap(tilemap, width, height)
+
         # Filter caves based on size
+        # Too small and they are deleted
+        for cave in found_caves:
+            if len(cave) < 8:
+                for tile in cave:
+                    tilemap[tile[0] + tile[1] * width] = 0
+
         # Return tilemap
-        return tilemap        
+        return tilemap
+
+    @staticmethod
+    def get_areas_from_tilemap (tilemap, width : int, height : int):
+        # Find the Caves
+        found_caves = list()
+        found_cave_tiles = list()
+        for y in range(height):
+            for x in range(width):
+                if tilemap[x + y * width] == 1:
+                    if (x, y) not in found_cave_tiles:
+                        found = list()
+                        searching = list()
+                        searching.append((x, y))
+                        while len(searching) > 0:
+                            current = searching.pop(0)
+                            found.append(current)
+                            for _x in range(-1, 2):
+                                if _x == 0:
+                                    continue
+                                check = (current[0] + _x, current[1])
+                                if tilemap[check[0] + check[1] * width] == 1 and not (check in searching or check in found):
+                                    searching.append(check)
+                            for _y in range(-1, 2):
+                                if _y == 0:
+                                    continue
+                                check = (current[0], current[1] + _y)
+                                if tilemap[check[0] + check[1] * width] == 1 and not (check in searching or check in found):
+                                    searching.append(check)
+                        
+                        found_caves.append(found)
+
+                        for found_tile in found:
+                            found_cave_tiles.append(found_tile)
+        
+        return found_caves
+
+        
+
+                

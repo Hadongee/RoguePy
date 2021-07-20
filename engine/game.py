@@ -1,4 +1,5 @@
 import tcod
+import random
 
 from .actions import Action, EscapeAction, MovementAction
 from .input_handlers import EventHandler
@@ -24,7 +25,8 @@ class Game :
 
         self.entities = list()
 
-        self.add_entity(Tilemap(self, int(self.screen_width/2), int(self.screen_height/2), self.screen_width, self.screen_height))
+        tilemap = Tilemap(self, int(self.screen_width/2), int(self.screen_height/2), self.screen_width, self.screen_height)
+        self.add_entity(tilemap)
 
         #entity_pos = Position(int(self.screen_width/2), int(self.screen_height/2))
         # self.add_entity(
@@ -33,7 +35,15 @@ class Game :
         #         EntityMap(self, entity_pos, self.screen_width, self.screen_height, EntityMap.MAPTYPE_RANDOM(Tile(), SolidTile(), 0.7)),        
         #     )
         # )
-        self.add_entity(Player(int(self.screen_width/2), int(self.screen_height/2)))
+
+        caves = Tilemap.get_areas_from_tilemap(tilemap.tilemap, self.screen_width, self.screen_height)
+        biggest_cave = caves[0]
+        for cave in caves:
+            if len(cave) > len(biggest_cave):
+                biggest_cave = cave
+        spawnpoint = random.choice(biggest_cave)
+
+        self.add_entity(Player(spawnpoint[0], spawnpoint[1]))
 
     def add_entity (self, entity : Entity):
         self.entities.append(entity)

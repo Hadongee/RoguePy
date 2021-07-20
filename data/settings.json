@@ -1,6 +1,6 @@
 {
-    "screen_width": 100,
-    "screen_height": 100,
+    "screen_width": 40,
+    "screen_height": 40,
     "tilesheet": "data/dejavu10x10_gs_tc.png",
     "tilesheet_width": 32,
     "tilesheet_height": 8,
