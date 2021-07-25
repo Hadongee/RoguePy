@@ -5,8 +5,10 @@ from entities.entity import Entity
 from .position import Position
 from math import floor
 
+# Component to create a collection of entities with given positions
 class EntityMap (EntityGroup):
     # entity_spawn_method should be a method in the form (x  int, y : int, width: int, height : int) -> Entity
+    # All entities returned with entity_spawn_method must have a Position component
     def __init__ (self, game, position : Position, width : int, height : int, entity_spawn_method):
         super().__init__(game)
         self.width = width
