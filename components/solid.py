@@ -1,11 +1,12 @@
 from .component import Component
 from .position import Position
+from entities.entity import Entity
 
 class Solid (Component):
     solid_positions = list()
 
-    def __init__ (self, position : Position):
-        super().__init__()
+    def __init__ (self, parent : Entity, position : Position):
+        super().__init__(parent)
         self.position = position
 
     def bind (self):

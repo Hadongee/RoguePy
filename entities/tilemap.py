@@ -3,19 +3,21 @@ from entities.entity import Entity
 from components.entity_map import EntityMap
 from components.position import Position
 from .tile import Tile
-from .tile_solid import SolidTile
+from .tile_stone import StoneTile
+from .tile_bedrock import BedrockTile
+from .tile_gold import GoldTile
 
 import random
 
 class Tilemap (Entity):
     def __init__ (self, game, center_x : int, center_y : int, width : int, height : int):
         super().__init__()
-        self.tilemap = Tilemap.generate_tilemap(width, height, 0.55, 8, 4, 5)
-        self.add_component(Position(center_x, center_y))
-        self.add_component(EntityMap(game, self.get_component(Position), width, height, EntityMap.MAPTYPE_MULTIMAP([SolidTile(), GrassTile()], self.tilemap)))
+        self.tilemap = Tilemap.generate_tilemap(width, height, 0.575, 8, 4, 5, 0.05)
+        self.add_component(Position(self, center_x, center_y))
+        self.add_component(EntityMap(self, game, self.get_component(Position), width, height, EntityMap.MAPTYPE_MULTIMAP([StoneTile(), GrassTile(), BedrockTile(), GoldTile()], self.tilemap)))
     
     @staticmethod
-    def generate_tilemap (width : int, height : int, initial_alive_chance : float, step_count: int, starvation_count : int, birth_count : int, seed: int or None = random.randint(-100000, 100000)):
+    def generate_tilemap (width : int, height : int, initial_alive_chance : float, step_count: int, starvation_count : int, birth_count : int, gold_chance : float, seed: int or None = random.randint(-100000, 100000)):
         tilemap = list()
         random.seed = seed;
 
@@ -28,7 +30,7 @@ class Tilemap (Entity):
                     lookY = y + _y
                     if _x == 0 and _y == 0:
                         continue
-                    elif lookX < 0 or lookX >= width or lookY < 0 or lookY >= height:
+                    elif lookX <= 0 or lookX >= width-1 or lookY <= 0 or lookY >= height-1:
                         return 8
                     elif tilemap[lookX + lookY * width] == 0:
                         total+=1
@@ -68,9 +70,21 @@ class Tilemap (Entity):
         # Filter caves based on size
         # Too small and they are deleted
         for cave in found_caves:
-            if len(cave) < 8:
+            if len(cave) < 32:
                 for tile in cave:
                     tilemap[tile[0] + tile[1] * width] = 0
+
+        # Set border to bedrock
+        for y in range(height):
+            for x in range(width):
+                if y == 0 or y == height-1 or x == 0 or x == width-1:
+                    tilemap[x + y * width] = 2
+
+        # Place Gold :)
+        for y in range(1, height-1):
+            for x in range(1, width-1):
+                if tilemap[x + y * width] == 0 and random.random() <= gold_chance:
+                    tilemap[x + y * width] = 3
 
         # Return tilemap
         return tilemap

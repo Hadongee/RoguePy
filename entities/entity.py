@@ -9,6 +9,14 @@ class Entity :
     def update (self, game):
         for component in self.components:
             component.update(game)
+            
+    def early_update (self, game):
+        for component in self.components:
+            component.early_update(game)
+    
+    def late_update (self, game):
+        for component in self.components:
+            component.late_update(game)
 
     def add_component (self, component: Component):
         self.components.append(component)
