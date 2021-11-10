@@ -3,6 +3,7 @@ from .component import Component
 from .position import Position
 from .solid import Solid
 from entities.entity import Entity
+from entities.tile_bedrock import BedrockTile
 import math
 
 class Vision (Component):
@@ -17,6 +18,15 @@ class Vision (Component):
             renderer = rendered_entity.get_component(Renderer)
             if not renderer.always_visible:
                 renderer.visible = False
+        
+        #self.raycast(game, 0, self.position.y - 1)
+        #self.raycast(game, 0, self.position.y + 1)
+        #self.raycast(game, game.screen_width-1, self.position.y - 1)
+        #self.raycast(game, game.screen_width-1, self.position.y + 1)
+        #self.raycast(game, self.position.y - 1, 0)
+        #self.raycast(game, self.position.x + 1, 0)
+        #self.raycast(game, self.position.y - 1, game.screen_height-1)
+        #self.raycast(game, self.position.x + 1, game.screen_height-1)
                 
         for x in range(game.screen_width):
             self.raycast(game, x, 0)
@@ -41,6 +51,8 @@ class Vision (Component):
         
         angle = math.atan2(difference_pos_y, difference_pos_x)
         
+        #print(f'angle: {angle}')
+        
         hit_solid = 0
 
         while hit_solid <= 0:
@@ -56,25 +68,18 @@ class Vision (Component):
             dist_next_x = math.sqrt((next_x-my_pos_x)**2 + (next_x_y-my_pos_y)**2)
             dist_next_y = math.sqrt((next_y_x-my_pos_x)**2 + (next_y-my_pos_y)**2)
             
-            if dist_next_x == dist_next_y:
+            #print(f'next_x: {next_x}, next_y: {next_y}, next_x_y: {next_x_y}, next_y_x: {next_y_x}, my_pos_x: {my_pos_x}, my_pos_y: {my_pos_y}')
+            
+            if abs(dist_next_x - dist_next_y) < 0.01:
                 for entity in Position.entities_at_position[(next_x, next_y)]:
                     entity_renderer = entity.get_component(Renderer)
                     if entity_renderer != None:
                         entity_renderer.seen = True
                         entity_renderer.visible = True
+                    if isinstance(entity, BedrockTile):
+                        hit_solid += 1000
                     if entity.get_component(Solid) != None:
                         hit_solid += 1
-                    else:
-                        for entity in Position.entities_at_position[(next_x, current_y)]:
-                            entity_renderer = entity.get_component(Renderer)
-                            if entity_renderer != None:
-                                entity_renderer.seen = True
-                                entity_renderer.visible = True
-                        for entity in Position.entities_at_position[(current_x, next_y)]:
-                            entity_renderer = entity.get_component(Renderer)
-                            if entity_renderer != None:
-                                entity_renderer.seen = True
-                                entity_renderer.visible = True
                 current_x = next_x
                 my_pos_y = next_x_y
                 current_y = next_y
@@ -85,49 +90,55 @@ class Vision (Component):
                     if entity_renderer != None:
                         entity_renderer.seen = True
                         entity_renderer.visible = True
+                    if isinstance(entity, BedrockTile):
+                        hit_solid += 1000
                     if entity.get_component(Solid) != None:
                         hit_solid += 1
                     else:
-                        for entity in Position.entities_at_position[(next_next_x, current_y)]:
-                            entity_renderer = entity.get_component(Renderer)
-                            if entity_renderer != None:
-                                entity_renderer.seen = True
-                                entity_renderer.visible = True
                         for entity in Position.entities_at_position[(next_x, next_y)]:
                             entity_renderer = entity.get_component(Renderer)
-                            if entity_renderer != None:
+                            if entity_renderer != None and entity.get_component(Solid) != None:
+                                entity_renderer.seen = True
+                                entity_renderer.visible = True
+                        for entity in Position.entities_at_position[(next_next_x, current_y)]:
+                            entity_renderer = entity.get_component(Renderer)
+                            if entity_renderer != None and entity.get_component(Solid) != None:
                                 entity_renderer.seen = True
                                 entity_renderer.visible = True
                         for entity in Position.entities_at_position[(next_next_x, next_y)]:
                             entity_renderer = entity.get_component(Renderer)
-                            if entity_renderer != None:
+                            if entity_renderer != None and entity.get_component(Solid) != None:
                                 entity_renderer.seen = True
                                 entity_renderer.visible = True
                 current_x = next_x
                 my_pos_y = next_x_y
+                my_pos_x = next_x
             elif dist_next_y < dist_next_x:
                 for entity in Position.entities_at_position[(current_x, next_y)]:
                     entity_renderer = entity.get_component(Renderer)
                     if entity_renderer != None:
                         entity_renderer.seen = True
                         entity_renderer.visible = True
+                    if isinstance(entity, BedrockTile):
+                        hit_solid += 1000
                     if entity.get_component(Solid) != None:
                         hit_solid += 1
                     else:
+                        for entity in Position.entities_at_position[(next_x, next_y)]:
+                            entity_renderer = entity.get_component(Renderer)
+                            if entity_renderer != None and entity.get_component(Solid) != None:
+                                entity_renderer.seen = True
+                                entity_renderer.visible = True
                         for entity in Position.entities_at_position[(current_x, next_next_y)]:
                             entity_renderer = entity.get_component(Renderer)
-                            if entity_renderer != None:
+                            if entity_renderer != None and entity.get_component(Solid) != None:
                                 entity_renderer.seen = True
                                 entity_renderer.visible = True
                         for entity in Position.entities_at_position[(next_x, next_next_y)]:
                             entity_renderer = entity.get_component(Renderer)
-                            if entity_renderer != None:
-                                entity_renderer.seen = True
-                                entity_renderer.visible = True
-                        for entity in Position.entities_at_position[(next_x, next_y)]:
-                            entity_renderer = entity.get_component(Renderer)
-                            if entity_renderer != None:
+                            if entity_renderer != None and entity.get_component(Solid) != None:
                                 entity_renderer.seen = True
                                 entity_renderer.visible = True
                 current_y = next_y
                 my_pos_x = next_y_x
+                my_pos_y = next_y

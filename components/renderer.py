@@ -3,14 +3,14 @@ from .component import Component
 from .position import Position
 
 class Renderer (Component):
-    def __init__ (self, parent, position : Position, character : str or None = "$", fg : list or None = [255, 0, 255], bg : list or None = [0, 0, 0], non_visible_fg : list or None = [255, 0, 255], non_visible_bg : list or None = [0, 0, 0], always_visible : bool or None = False):
+    def __init__ (self, parent, position : Position, character : str or None = "$", fg : list or None = [255, 0, 255], bg : list or None = [0, 0, 0], non_visible_fg : list or None = [35, 35, 35], non_visible_bg : list or None = [0, 0, 0], always_visible : bool or None = False):
         super().__init__(parent)
         self.always_visible = always_visible
         if self.always_visible:
             self.seen = True
             self.visible = True
         else:
-            self.seen = True
+            self.seen = False
             self.visible = False        
         self.character = character
         self.fg = fg
