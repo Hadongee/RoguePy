@@ -1,6 +1,9 @@
 class Action:
     actions = dict()
 
+    def __init__ (self, update_game_entities : bool or None = True):
+        self.update_game_entities = update_game_entities
+    
     @classmethod
     def add_action (cls, action:type, function):
         if action not in Action.actions:
@@ -8,8 +11,9 @@ class Action:
         cls.actions[action].append(function)
         print("Added new action: " + str(action) + ", total of this action=" + str(len(cls.actions[action])) + ", total actions=" + str(len(cls.actions)))
 
-class EscapeAction:
-    pass
+class EscapeAction (Action):
+    def __init__ (self):
+        super().__init__(False)
 
 class MovementAction(Action):
     def __init__(self, dx: int, dy: int):
@@ -17,3 +21,15 @@ class MovementAction(Action):
 
         self.dx = dx
         self.dy = dy
+
+class WaitAction(Action):
+    def __init__(self):
+        super().__init__()
+        
+class DigAction(Action):
+    def __init__(self):
+        super().__init__()
+        
+class LookAction(Action):
+    def __init__(self):
+        super().__init__()

@@ -10,7 +10,11 @@ class PlayerMove (Component):
         self.position = position
 
     def handler_MovementAction (self, action : MovementAction):
-        if not Solid.is_solid(self.position.x + action.dx, self.position.y + action.dy):
+        moving_to_solid = False
+        for entity in Position.entities_at_position[self.position.x + action.dx, self.position.y + action.dy]:
+            if entity.get_component(Solid):
+                moving_to_solid = True
+        if not moving_to_solid:
             self.position.move(action.dx, action.dy)
 
     def bind (self):

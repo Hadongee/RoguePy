@@ -1,9 +1,11 @@
 import tcod
 import random
+import copy
 
 from .actions import Action, EscapeAction, MovementAction
 from .input_handlers import EventHandler
 from .settings_handler import Settings, SettingsHandler
+from .cursor import Cursor
 from components.component import Component
 from entities.entity import Entity
 from entities.player import Player
@@ -29,6 +31,8 @@ class Game :
         self.tileset = tcod.tileset.load_tilesheet(self.settings.tilesheet, self.settings.tilesheet_width, self.settings.tilesheet_height, tcod.tileset.CHARMAP_TCOD)
 
         self.event_handler = EventHandler()
+        
+        self.cursor = Cursor()
 
         self.entities = list()
 
@@ -73,7 +77,8 @@ class Game :
         ) as context:
             self.root_console = tcod.Console(self.screen_width, self.screen_height, order="F")
             while True:
-                if not self.event_handler.no_action:
+                if self.event_handler.update_game_entities:
+                    print("---------UPDATING ENTITIES---------")
                     self.root_console.clear()
                     for entity in self.entities:
                         entity.early_update(self)
@@ -81,19 +86,17 @@ class Game :
                         entity.update(self)
                     for entity in self.entities:
                         entity.late_update(self)
-                        
+
                 context.present(self.root_console, keep_aspect=True)
 
-                self.event_handler.no_action = False
+                self.event_handler.update_game_entities = False
 
                 for event in tcod.event.wait():
                     action = self.event_handler.dispatch(event)
 
                     if action is None:
-                        self.event_handler.no_action = True
                         continue
                     elif isinstance(action, EscapeAction):
-                        self.event_handler.no_action = True
                         raise SystemExit()
                         continue
                     for key, actions in Action.actions.items():

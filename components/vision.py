@@ -70,7 +70,7 @@ class Vision (Component):
             
             #print(f'next_x: {next_x}, next_y: {next_y}, next_x_y: {next_x_y}, next_y_x: {next_y_x}, my_pos_x: {my_pos_x}, my_pos_y: {my_pos_y}')
             
-            if abs(dist_next_x - dist_next_y) < 0.01:
+            if abs(dist_next_x - dist_next_y) < 0.001:
                 for entity in Position.entities_at_position[(next_x, next_y)]:
                     entity_renderer = entity.get_component(Renderer)
                     if entity_renderer != None:

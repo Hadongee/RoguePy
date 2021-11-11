@@ -2,14 +2,15 @@ from typing import Optional
 from enum import Enum
 
 import tcod.event
+from tcod.event import KeySym
 
-from .actions import Action, EscapeAction, MovementAction
+from .actions import Action, EscapeAction, MovementAction, WaitAction, DigAction, LookAction
 
 class EventHandler(tcod.event.EventDispatch[Action]):
 
     def __init__ (self):
         self.state = EventHandlerState.MAIN
-        self.no_action = False
+        self.update_game_entities = True
 
     def ev_quit(self, event: tcod.event.Quit) -> Optional[Action]:
         raise SystemExit()
@@ -20,18 +21,31 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         key = event.sym
 
         if self.state == EventHandlerState.MAIN :
-            if key == tcod.event.K_UP:
+            if key == KeySym.UP:
                 action = MovementAction(dx=0, dy=-1)
-            elif key == tcod.event.K_DOWN:
+            elif key == KeySym.DOWN:
                 action = MovementAction(dx=0, dy=1)
-            elif key == tcod.event.K_LEFT:
+            elif key == KeySym.LEFT:
                 action = MovementAction(dx=-1, dy=0)
-            elif key == tcod.event.K_RIGHT:
+            elif key == KeySym.RIGHT:
                 action = MovementAction(dx=1, dy=0)
+                
+            elif key == KeySym.PERIOD:
+                action = WaitAction()
+            
+            elif key == KeySym.l:
+                action = LookAction()
+                self.state = EventHandlerState.LOOK
+                
+            elif key == KeySym.d:
+                action = DigAction()
 
-            elif key == tcod.event.K_ESCAPE:
+            elif key == KeySym.ESCAPE:
                 action = EscapeAction()
-
+        
+        if action != None:
+            self.update_game_entities = action.update_game_entities
+        
         # No valid key was pressed
         return action
 
