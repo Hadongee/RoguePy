@@ -8,8 +8,8 @@ import random
 class GrassTile (Tile):
     def __init__ (self):
         super().__init__()
-        self.add_component(Position(self, 0, 0))
-        self.add_component(Renderer(self, self.get_component(Position), character=" "))
+        self.add_component(Position(0, 0))
+        self.add_component(Renderer(self.get_component(Position), character=" "))
     
     def on_created (self):
         floor_characters = [' ', '.', ',', '\'', '"', '`']

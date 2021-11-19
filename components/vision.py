@@ -4,12 +4,13 @@ from .position import Position
 from .solid import Solid
 from entities.entity import Entity
 from entities.tile_bedrock import BedrockTile
+from engine.gamestate import GameState
 import math
 
 class Vision (Component):
     
-    def __init__ (self, parent : Entity, position : Position):
-        super().__init__(parent)
+    def __init__ (self, position : Position, parent : Entity or None = None, update_on_gamestate : GameState or None = GameState.EVERYTHINGTURN):
+        super().__init__(parent, update_on_gamestate)
         self.position = position
     
     def early_update (self, game):

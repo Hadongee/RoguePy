@@ -1,5 +1,6 @@
 import random
 
+from engine.gamestate import GameState
 from .entity_group import EntityGroup
 from entities.entity import Entity
 from .position import Position
@@ -9,8 +10,8 @@ from math import floor
 class EntityMap (EntityGroup):
     # entity_spawn_method should be a method in the form (x  int, y : int, width: int, height : int) -> Entity
     # All entities returned with entity_spawn_method must have a Position component
-    def __init__ (self, parent, game, position : Position, width : int, height : int, entity_spawn_method):
-        super().__init__(parent, game)
+    def __init__ (self, game, position : Position, width : int, height : int, entity_spawn_method, parent : Entity or None = None, update_on_gamestate : GameState or None = GameState.EVERYTHINGTURN):
+        super().__init__(game, parent=parent, update_on_gamestate=update_on_gamestate)
         self.width = width
         self.height = height
         self.position = position

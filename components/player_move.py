@@ -3,10 +3,11 @@ from .position import Position
 from engine.actions import Action, MovementAction
 from .solid import Solid
 from entities.entity import Entity
+from engine.gamestate import GameState
 
 class PlayerMove (Component):
-    def __init__ (self, parent : Entity, position : Position):
-        super().__init__(parent)
+    def __init__ (self, position : Position, parent : Entity or None = None, update_on_gamestate : GameState or None = GameState.EVERYTHINGTURN):
+        super().__init__(parent, update_on_gamestate)
         self.position = position
 
     def handler_MovementAction (self, action : MovementAction):

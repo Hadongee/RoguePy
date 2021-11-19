@@ -6,15 +6,11 @@ from .actions import Action, EscapeAction, MovementAction
 from .input_handlers import EventHandler
 from .settings_handler import Settings, SettingsHandler
 from .cursor import Cursor
-from components.component import Component
 from entities.entity import Entity
 from entities.player import Player
-from components.position import Position
-from components.entity_map import EntityMap
-from entities.tile import Tile
-from entities.tile_solid import SolidTile
 from entities.entity import Entity
 from entities.tilemap import Tilemap
+from engine.gamestate import GameState
 
 class Game :
     instance = None

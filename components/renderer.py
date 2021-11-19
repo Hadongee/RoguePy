@@ -1,10 +1,11 @@
 from entities.entity import Entity
 from .component import Component
 from .position import Position
+from engine.gamestate import GameState
 
 class Renderer (Component):
-    def __init__ (self, parent, position : Position, character : str or None = "$", fg : list or None = [255, 0, 255], bg : list or None = [0, 0, 0], non_visible_fg : list or None = [20, 20, 20], non_visible_bg : list or None = [0, 0, 0], always_visible : bool or None = False):
-        super().__init__(parent)
+    def __init__ (self, position : Position, character : str or None = "$", fg : list or None = [255, 0, 255], bg : list or None = [0, 0, 0], non_visible_fg : list or None = [35, 35, 35], non_visible_bg : list or None = [0, 0, 0], always_visible : bool or None = False, parent : Entity or None = None, update_on_gamestate : GameState or None = GameState.EVERYTHINGTURN):
+        super().__init__(parent, update_on_gamestate)
         self.always_visible = always_visible
         if self.always_visible:
             self.seen = True

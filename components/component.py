@@ -1,10 +1,13 @@
 # Base Component class for the ECS
+from engine.gamestate import GameState
+
 class Component:
-    def __init__ (self, parent):
+    def __init__ (self, parent = None, update_on_gamestate : GameState or None = GameState.EVERYTHINGTURN):
         # enabled property, can be used later to turn off components without deleting them
         # NOT USED CURRENTLY!
         self.enabled = True
         self.entity = parent
+        self.update_on_gamestate = update_on_gamestate
 
     # Called before each action, once per game loop
     def update (self, game):

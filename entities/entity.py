@@ -20,6 +20,9 @@ class Entity :
 
     def add_component (self, component: Component):
         self.components.append(component)
+        self.components[len(self.components)-1].entity = self
+        if hasattr(self.components[len(self.components)-1], "on_add_component") == True:
+            self.components[len(self.components)-1].on_add_component()
 
     def del_component (self, component: Component):
         for _component in self.components:
