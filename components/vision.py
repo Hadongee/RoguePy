@@ -55,8 +55,9 @@ class Vision (Component):
         #print(f'angle: {angle}')
         
         hit_solid = 0
+        distance = 0
 
-        while hit_solid <= 0:
+        while hit_solid <= 0 and distance < 100:
             next_x = (int)(current_x + (difference_pos_x / abs(difference_pos_x)) if difference_pos_x != 0 else 0)
             next_y = (int)(current_y + (difference_pos_y / abs(difference_pos_y)) if difference_pos_y != 0 else 0)
             
@@ -85,6 +86,7 @@ class Vision (Component):
                 my_pos_y = next_x_y
                 current_y = next_y
                 my_pos_x = next_y_x
+                distance += dist_next_x
             elif dist_next_x < dist_next_y:
                 for entity in Position.entities_at_position[(next_x, current_y)]:
                     entity_renderer = entity.get_component(Renderer)
@@ -114,6 +116,7 @@ class Vision (Component):
                 current_x = next_x
                 my_pos_y = next_x_y
                 my_pos_x = next_x
+                distance += dist_next_x
             elif dist_next_y < dist_next_x:
                 for entity in Position.entities_at_position[(current_x, next_y)]:
                     entity_renderer = entity.get_component(Renderer)
@@ -143,3 +146,4 @@ class Vision (Component):
                 current_y = next_y
                 my_pos_x = next_y_x
                 my_pos_y = next_y
+                distance += dist_next_y
