@@ -5,11 +5,13 @@ import copy
 from .actions import Action, EscapeAction, MovementAction
 from .input_handlers import EventHandler
 from .settings_handler import Settings, SettingsHandler
-from .cursor import Cursor
+from .gamestate import GameState
 from entities.entity import Entity
 from entities.player import Player
 from entities.entity import Entity
 from entities.tilemap import Tilemap
+from entities.cursor import Cursor
+from components.position import Position
 from engine.gamestate import GameState
 
 class Game :
@@ -23,16 +25,18 @@ class Game :
 
         self.screen_width = self.settings.screen_width
         self.screen_height = self.settings.screen_height
+        
+        self.game_width = self.screen_width
+        self.game_height = self.screen_height - 5
 
         self.tileset = tcod.tileset.load_tilesheet(self.settings.tilesheet, self.settings.tilesheet_width, self.settings.tilesheet_height, tcod.tileset.CHARMAP_TCOD)
 
         self.event_handler = EventHandler()
-        
-        self.cursor = Cursor()
+        self.gamestate = GameState.PLAYERTURN
 
         self.entities = list()
 
-        tilemap = Tilemap(self, int(self.screen_width/2), int(self.screen_height/2), self.screen_width, self.screen_height)
+        tilemap = Tilemap(self, int(self.game_width/2), int(self.game_height/2), self.game_width, self.game_height)
         self.add_entity(tilemap)
 
         #entity_pos = Position(int(self.screen_width/2), int(self.screen_height/2))
@@ -43,7 +47,7 @@ class Game :
         #     )
         # )
 
-        caves = Tilemap.get_areas_from_tilemap(tilemap.tilemap, self.screen_width, self.screen_height)
+        caves = Tilemap.get_areas_from_tilemap(tilemap.tilemap, self.game_width, self.game_height)
         biggest_cave = caves[0]
         for cave in caves:
             if len(cave) > len(biggest_cave):
@@ -51,6 +55,9 @@ class Game :
         spawnpoint = random.choice(biggest_cave)
 
         self.add_entity(Player(spawnpoint[0], spawnpoint[1]))
+        self.player = self.entities[len(self.entities) - 1]
+        
+        self.add_entity(Cursor(self.game_width, self.game_height, int(self.game_width/2), int(self.game_height/2)))
 
     def add_entity (self, entity : Entity):
         self.entities.append(entity)
@@ -82,6 +89,8 @@ class Game :
                         entity.update(self)
                     for entity in self.entities:
                         entity.late_update(self)
+                
+                self.root_console.print(x=0, y=self.screen_height-5, string=f"X: {self.player.get_component(Position).x} Y: {self.player.get_component(Position).y}", fg=[255, 255, 255], bg=[0, 0, 0])
 
                 context.present(self.root_console, keep_aspect=True)
 

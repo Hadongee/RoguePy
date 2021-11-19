@@ -29,13 +29,13 @@ class Vision (Component):
         #self.raycast(game, self.position.y - 1, game.screen_height-1)
         #self.raycast(game, self.position.x + 1, game.screen_height-1)
                 
-        for x in range(game.screen_width):
+        for x in range(game.game_width):
             self.raycast(game, x, 0)
-            self.raycast(game, x, game.screen_height-1)
+            self.raycast(game, x, game.game_height-1)
 
-        for y in range(game.screen_height):
+        for y in range(game.game_height):
             self.raycast(game, 0, y)
-            self.raycast(game, game.screen_width-1, y)
+            self.raycast(game, game.game_width-1, y)
             
     def raycast (self, game, other_x : float, other_y : float):
         current_x = self.position.x

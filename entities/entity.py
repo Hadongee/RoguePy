@@ -1,22 +1,27 @@
 from components.component import Component
+from engine.gamestate import GameState
 
 class Entity :
-    def __init__ (self, *components : Component):
+    def __init__ (self, description : str or None = "An entity", *components : Component):
+        self.description = description
         self.components = list()
         for component in components:
             self.add_component(component)
 
     def update (self, game):
         for component in self.components:
-            component.update(game)
+            if component.enabled and (component.update_on_gamestate == GameState.EVERYTHINGTURN or component.update_on_gamestate == game.gamestate):
+                component.update(game)
             
     def early_update (self, game):
         for component in self.components:
-            component.early_update(game)
+            if component.enabled and (component.update_on_gamestate == GameState.EVERYTHINGTURN or component.update_on_gamestate == game.gamestate):
+                component.early_update(game)
     
     def late_update (self, game):
         for component in self.components:
-            component.late_update(game)
+            if component.enabled and (component.update_on_gamestate == GameState.EVERYTHINGTURN or component.update_on_gamestate == game.gamestate):
+                component.late_update(game)
 
     def add_component (self, component: Component):
         self.components.append(component)

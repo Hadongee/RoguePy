@@ -21,6 +21,13 @@ class MovementAction(Action):
 
         self.dx = dx
         self.dy = dy
+        
+class CursorMovementAction(Action):
+    def __init__(self, dx: int, dy: int):
+        super().__init__()
+
+        self.dx = dx
+        self.dy = dy
 
 class WaitAction(Action):
     def __init__(self):

@@ -16,10 +16,10 @@ class EntityMap (EntityGroup):
         self.height = height
         self.position = position
 
-        for y in range(0, width):
-            for x in range(0, height):
+        for y in range(0, height):
+            for x in range(0, width):
                 self.add_entity(game, entity_spawn_method(x, y, width, height))
-                if self.children[x + y * width - 1].get_component(Position) == None:
+                if self.children[x + y * width].get_component(Position) == None:
                     print("Error: Trying to create EntityMapGrid of entity without Position component")
                     raise
                 child_position = self.children[x + y * width].get_component(Position)
