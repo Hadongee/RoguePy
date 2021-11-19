@@ -4,6 +4,7 @@ from engine.gamestate import GameState
 class Entity :
     def __init__ (self, description : str or None = "An entity", *components : Component):
         self.description = description
+        self.diggable = False
         self.components = list()
         for component in components:
             self.add_component(component)

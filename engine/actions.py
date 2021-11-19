@@ -33,10 +33,17 @@ class WaitAction(Action):
     def __init__(self):
         super().__init__()
         
-class DigAction(Action):
+class DigToggleAction(Action):
     def __init__(self):
         super().__init__()
         
-class LookAction(Action):
+class LookToggleAction(Action):
     def __init__(self):
         super().__init__()
+        
+class DigAction (Action):
+    def __init__(self, dx: int, dy: int):
+        super().__init__()
+
+        self.dx = dx
+        self.dy = dy

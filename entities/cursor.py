@@ -4,7 +4,7 @@ from components.renderer import Renderer
 from components.action_component_enabler import ActionComponentEnabler
 from components.cursor_move import CursorMove
 from components.cursor_look import CursorLook
-from engine.actions import LookAction
+from engine.actions import LookToggleAction
 
 class Cursor (Entity):
     def __init__ (self, game_width : int, game_height : int, spawn_x : int or None = 0, spawn_y : int or None = 0):
@@ -14,5 +14,5 @@ class Cursor (Entity):
         self.get_component(Renderer).enabled = False
         self.add_component(CursorLook(self.get_component(Position)))
         self.get_component(CursorLook).enabled = False
-        self.add_component(ActionComponentEnabler([Renderer, CursorLook], LookAction))
+        self.add_component(ActionComponentEnabler([Renderer, CursorLook], LookToggleAction))
         self.add_component(CursorMove(self.get_component(Position), game_width, game_height))

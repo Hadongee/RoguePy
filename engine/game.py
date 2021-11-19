@@ -54,7 +54,7 @@ class Game :
                 biggest_cave = cave
         spawnpoint = random.choice(biggest_cave)
 
-        self.add_entity(Player(spawnpoint[0], spawnpoint[1]))
+        self.add_entity(Player(self, spawnpoint[0], spawnpoint[1]))
         self.player = self.entities[len(self.entities) - 1]
         
         self.add_entity(Cursor(self.game_width, self.game_height, int(self.game_width/2), int(self.game_height/2)))

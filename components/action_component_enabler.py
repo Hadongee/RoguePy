@@ -1,5 +1,5 @@
 from components.component import Component
-from engine.actions import Action, LookAction
+from engine.actions import Action
 from entities.entity import Entity
 from engine.gamestate import GameState
 
