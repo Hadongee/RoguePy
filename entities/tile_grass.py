@@ -9,7 +9,6 @@ class GrassTile (Tile):
     def __init__ (self):
         super().__init__()
         self.description = "Grass"
-        self.add_component(Position(0, 0))
         self.add_component(Renderer(self.get_component(Position), character=" "))
     
     def on_created (self):

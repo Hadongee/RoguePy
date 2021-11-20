@@ -4,7 +4,7 @@ from enum import Enum
 import tcod.event
 from tcod.event import KeySym
 
-from .actions import Action, DigAction, EscapeAction, MovementAction, WaitAction, DigToggleAction, LookToggleAction, CursorMovementAction
+from .actions import Action, DigAction, EscapeAction, MovementAction, WaitAction, DigToggleAction, LookToggleAction, CursorMovementAction, DigMovementAction
 
 class EventHandler(tcod.event.EventDispatch[Action]):
 
@@ -58,15 +58,21 @@ class EventHandler(tcod.event.EventDispatch[Action]):
                 self.state = EventHandlerState.MAIN
         elif self.state == EventHandlerState.DIG :
             if key == KeySym.UP:
-                action = DigAction(dx=0, dy=-1)
+                action = DigMovementAction(dx=0, dy=-1)
             elif key == KeySym.DOWN:
-                action = DigAction(dx=0, dy=1)
+                action = DigMovementAction(dx=0, dy=1)
             elif key == KeySym.LEFT:
-                action = DigAction(dx=-1, dy=0)
+                action = DigMovementAction(dx=-1, dy=0)
             elif key == KeySym.RIGHT:
-                action = DigAction(dx=1, dy=0)
+                action = DigMovementAction(dx=1, dy=0)
                 
-            self.state = EventHandlerState.MAIN
+            elif key == KeySym.ESCAPE:
+                action = DigToggleAction()
+                self.state = EventHandlerState.MAIN
+
+            elif key == KeySym.RETURN:
+                action = DigAction()
+                self.state = EventHandlerState.MAIN
         
         if action != None:
             self.update_game_entities = action.update_game_entities

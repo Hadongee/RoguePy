@@ -4,7 +4,6 @@ from engine.gamestate import GameState
 class Entity :
     def __init__ (self, description : str or None = "An entity", *components : Component):
         self.description = description
-        self.diggable = False
         self.components = list()
         for component in components:
             self.add_component(component)
@@ -31,10 +30,7 @@ class Entity :
             self.components[len(self.components)-1].on_add_component()
 
     def del_component (self, component: Component):
-        for _component in self.components:
-            if type(_component) == type(component):
-                self.components.remove(_component)
-                return
+        self.components.remove(component)
     
     def get_component (self, component_type : type):
         for component in self.components:

@@ -28,7 +28,6 @@ class Position (Component):
         #print("Moving: " + str(self) + " typeof " + str(type(self)) + " by " + Position(dx, dy).to_string() + " to " + self.to_string())
     
     def set (self, x : int, y : int):
-        
         Position.entities_at_position[(self.x, self.y)].remove(self.entity)
         self.x = x
         self.y = y

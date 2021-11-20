@@ -42,6 +42,10 @@ class LookToggleAction(Action):
         super().__init__()
         
 class DigAction (Action):
+    def __init__(self):
+        super().__init__()
+
+class DigMovementAction (Action):
     def __init__(self, dx: int, dy: int):
         super().__init__()
 

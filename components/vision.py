@@ -80,8 +80,10 @@ class Vision (Component):
                         entity_renderer.visible = True
                     if isinstance(entity, BedrockTile):
                         hit_solid += 1000
+                        break
                     if entity.get_component(Solid) != None:
                         hit_solid += 1
+                        break
                 current_x = next_x
                 my_pos_y = next_x_y
                 current_y = next_y
@@ -95,8 +97,10 @@ class Vision (Component):
                         entity_renderer.visible = True
                     if isinstance(entity, BedrockTile):
                         hit_solid += 1000
+                        break
                     if entity.get_component(Solid) != None:
                         hit_solid += 1
+                        break
                     else:
                         for entity in Position.entities_at_position[(next_x, next_y)]:
                             entity_renderer = entity.get_component(Renderer)
@@ -125,8 +129,10 @@ class Vision (Component):
                         entity_renderer.visible = True
                     if isinstance(entity, BedrockTile):
                         hit_solid += 1000
+                        break
                     if entity.get_component(Solid) != None:
                         hit_solid += 1
+                        break
                     else:
                         for entity in Position.entities_at_position[(next_x, next_y)]:
                             entity_renderer = entity.get_component(Renderer)

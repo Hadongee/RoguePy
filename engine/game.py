@@ -29,7 +29,7 @@ class Game :
         self.game_width = self.screen_width
         self.game_height = self.screen_height - 5
 
-        self.tileset = tcod.tileset.load_tilesheet(self.settings.tilesheet, self.settings.tilesheet_width, self.settings.tilesheet_height, tcod.tileset.CHARMAP_TCOD)
+        self.tileset = tcod.tileset.load_tilesheet(self.settings.tilesheet, self.settings.tilesheet_width, self.settings.tilesheet_height, tcod.tileset.CHARMAP_CP437)
 
         self.event_handler = EventHandler()
         self.gamestate = GameState.PLAYERTURN
@@ -38,15 +38,7 @@ class Game :
 
         tilemap = Tilemap(self, int(self.game_width/2), int(self.game_height/2), self.game_width, self.game_height)
         self.add_entity(tilemap)
-
-        #entity_pos = Position(int(self.screen_width/2), int(self.screen_height/2))
-        # self.add_entity(
-        #     Entity(
-        #         entity_pos,
-        #         EntityMap(self, entity_pos, self.screen_width, self.screen_height, EntityMap.MAPTYPE_RANDOM(Tile(), SolidTile(), 0.7)),        
-        #     )
-        # )
-
+        
         caves = Tilemap.get_areas_from_tilemap(tilemap.tilemap, self.game_width, self.game_height)
         biggest_cave = caves[0]
         for cave in caves:
@@ -57,7 +49,7 @@ class Game :
         self.add_entity(Player(self, spawnpoint[0], spawnpoint[1]))
         self.player = self.entities[len(self.entities) - 1]
         
-        self.add_entity(Cursor(self.game_width, self.game_height, int(self.game_width/2), int(self.game_height/2)))
+        self.add_entity(Cursor(self, int(self.game_width/2), int(self.game_height/2)))
 
     def add_entity (self, entity : Entity):
         self.entities.append(entity)
@@ -66,6 +58,13 @@ class Game :
         for component in entity.components:
             if hasattr(component, "bind") == True:
                 component.bind()
+    
+    def del_entity (self, entity : Entity):
+        if entity in self.entities:
+            self.entities.remove(entity)
+        position_of_entity = entity.get_component(Position)
+        if position_of_entity != None:
+            Position.entities_at_position[(position_of_entity.x, position_of_entity.y)].remove(entity)
     
     def get_entities_with_component (self, component_type : type):
         entities_with_component = list()
@@ -76,7 +75,7 @@ class Game :
 
     def start_game_loop (self):
         with tcod.context.new_terminal(
-            self.screen_width, self.screen_height, tileset=self.tileset, title=self.settings.title, vsync=self.settings.vsync,
+            self.screen_width, self.screen_height, tileset=self.tileset, title=self.settings.title, vsync=self.settings.vsync
         ) as context:
             self.root_console = tcod.Console(self.screen_width, self.screen_height, order="F")
             while True:

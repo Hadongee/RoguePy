@@ -1,9 +1,9 @@
 {
     "screen_width": 75,
     "screen_height": 50,
-    "tilesheet": "data/dejavu10x10_gs_tc.png",
-    "tilesheet_width": 32,
-    "tilesheet_height": 8,
+    "tilesheet": "data/16x16-RogueYun-AgmEdit.png",
+    "tilesheet_width": 16,
+    "tilesheet_height": 16,
     "title": "Journey Into Antathalon",
     "vsync": true
 }
