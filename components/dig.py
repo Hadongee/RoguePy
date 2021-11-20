@@ -1,3 +1,5 @@
+from components.player_stats import PlayerStats
+from entities.player import Player
 from .component import Component
 from .position import Position
 from engine.actions import Action, DigAction
@@ -10,15 +12,18 @@ class Dig (Component):
         super().__init__(parent, update_on_gamestate)
         self.position = position
         self.game = game
+        self.energy_for_dig = 10
 
     def handler_DigAction (self, action : DigAction):
-        dig_x = self.position.x
-        dig_y = self.position.y
-        
-        if (dig_x, dig_y) in Position.entities_at_position and len(Position.entities_at_position[(dig_x, dig_y)]) > 0:
-            for entity in Position.entities_at_position[(dig_x, dig_y)]:
-                if entity != self.entity and entity.get_component(Digable) != None:
-                    entity.get_component(Digable).on_dig(self.game)
+        if self.game.player.get_component(PlayerStats).energy >= self.energy_for_dig:
+            dig_x = self.position.x
+            dig_y = self.position.y
+            
+            if (dig_x, dig_y) in Position.entities_at_position and len(Position.entities_at_position[(dig_x, dig_y)]) > 0:
+                for entity in Position.entities_at_position[(dig_x, dig_y)]:
+                    if entity != self.entity and entity.get_component(Digable) != None:
+                        entity.get_component(Digable).on_dig(self.game)
+                        self.game.player.get_component(PlayerStats).change_energy(-self.energy_for_dig)
 
     def bind (self):
         Action.add_action(DigAction, self.handler_DigAction)

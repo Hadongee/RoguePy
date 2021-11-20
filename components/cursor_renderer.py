@@ -1,4 +1,5 @@
 from components.digable import Digable
+from components.player_stats import PlayerStats
 from .renderer import Renderer
 from .position import Position
 from engine.actions import Action, DigToggleAction, DigAction, LookToggleAction
@@ -14,13 +15,16 @@ class CursorRenderer (Renderer):
     def update (self, game):
         super().update(game)
         if self.mining:
-            for entity in Position.entities_at_position[(self.position.x, self.position.y)]:
-                if entity.get_component(Digable) != None:
-                    self.fg = self.valid_fg
-                    break
+            if game.player.get_component(PlayerStats).energy > 0:
+                for entity in Position.entities_at_position[(self.position.x, self.position.y)]:
+                    if entity.get_component(Digable) != None:
+                        self.fg = self.valid_fg
+                        break
+                else:
+                    self.fg = self.invalid_fg
             else:
                 self.fg = self.invalid_fg
-    
+        
     def handler_DigToggleAction (self, action):
         self.mining = not self.mining
     

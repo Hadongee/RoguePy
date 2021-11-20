@@ -1,7 +1,7 @@
 {
-    "screen_width": 75,
-    "screen_height": 50,
-    "tilesheet": "data/16x16-RogueYun-AgmEdit.png",
+    "screen_width": 70,
+    "screen_height": 70,
+    "tilesheet": "data/Haowan_Curses_1440x450.png",
     "tilesheet_width": 16,
     "tilesheet_height": 16,
     "title": "Journey Into Antathalon",

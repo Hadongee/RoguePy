@@ -11,6 +11,7 @@ from entities.player import Player
 from entities.entity import Entity
 from entities.tilemap import Tilemap
 from entities.cursor import Cursor
+from components.player_stats import PlayerStats
 from components.position import Position
 from engine.gamestate import GameState
 
@@ -75,7 +76,7 @@ class Game :
 
     def start_game_loop (self):
         with tcod.context.new_terminal(
-            self.screen_width, self.screen_height, tileset=self.tileset, title=self.settings.title, vsync=self.settings.vsync
+            self.screen_width, self.screen_height, tileset=self.tileset, title=self.settings.title, vsync=self.settings.vsync, sdl_window_flags=tcod.context.SDL_WINDOW_MAXIMIZED
         ) as context:
             self.root_console = tcod.Console(self.screen_width, self.screen_height, order="F")
             while True:
@@ -89,8 +90,11 @@ class Game :
                     for entity in self.entities:
                         entity.late_update(self)
                 
-                self.root_console.print(x=0, y=self.screen_height-5, string=f"X: {self.player.get_component(Position).x} Y: {self.player.get_component(Position).y}", fg=[255, 255, 255], bg=[0, 0, 0])
-
+                self.root_console.print(x=0, y=self.screen_height-5, string=f"Health: ", fg=[255, 0, 0], bg=[0, 0, 0])
+                self.root_console.print(x=8, y=self.screen_height-5, string=f"{self.player.get_component(PlayerStats).health}", fg=[255, 255, 255], bg=[0, 0, 0])
+                self.root_console.print(x=14, y=self.screen_height-5, string=f"Energy: ", fg=[0, 255, 0], bg=[0, 0, 0])
+                self.root_console.print(x=22, y=self.screen_height-5, string=f"{self.player.get_component(PlayerStats).energy}", fg=[255, 255, 255], bg=[0, 0, 0])
+                
                 context.present(self.root_console, keep_aspect=True)
 
                 self.event_handler.update_game_entities = False
