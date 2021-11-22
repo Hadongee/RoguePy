@@ -40,12 +40,41 @@ class DigToggleAction(Action):
 class LookToggleAction(Action):
     def __init__(self):
         super().__init__()
+
+class PickupToggleAction(Action):
+    def __init__(self):
+        super().__init__()
         
 class DigAction (Action):
     def __init__(self):
         super().__init__()
+        
+class PickupAction (Action):
+    def __init__(self):
+        super().__init__()
+
+class InventoryOpenAction (Action):
+    def __init__(self):
+        super().__init__(False)
+        
+class InventoryCloseAction (Action):
+    def __init__(self):
+        super().__init__(True)
+        
+class InventoryMoveAction (Action):
+    def __init__(self, change : int):
+        super().__init__(False)
+        
+        self.change = change
 
 class DigMovementAction (Action):
+    def __init__(self, dx: int, dy: int):
+        super().__init__()
+
+        self.dx = dx
+        self.dy = dy
+        
+class PickupMovementAction (Action):
     def __init__(self, dx: int, dy: int):
         super().__init__()
 

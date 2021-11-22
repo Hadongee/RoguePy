@@ -1,3 +1,4 @@
+from entities.tile_energizium import EnergiziumTile
 from entities.tile_grass import GrassTile
 from entities.entity import Entity
 from components.entity_map import EntityMap
@@ -12,9 +13,9 @@ import random
 class Tilemap (Entity):
     def __init__ (self, game, center_x : int, center_y : int, width : int, height : int):
         super().__init__()
-        self.tilemap = Tilemap.generate_tilemap(width, height, 0.575, 8, 4, 5, 0.05)
+        self.tilemap = Tilemap.generate_tilemap(width, height, 0.575, 8, 4, 5, 0.025)
         self.add_component(Position(center_x, center_y))
-        self.add_component(EntityMap(game, self.get_component(Position), width, height, EntityMap.MAPTYPE_MULTIMAP([StoneTile(), GrassTile(), BedrockTile(), GoldTile()], self.tilemap)))
+        self.add_component(EntityMap(game, self.get_component(Position), width, height, EntityMap.MAPTYPE_MULTIMAP([StoneTile(), GrassTile(), BedrockTile(), EnergiziumTile()], self.tilemap)))
     
     @staticmethod
     def generate_tilemap (width : int, height : int, initial_alive_chance : float, step_count: int, starvation_count : int, birth_count : int, gold_chance : float, seed: int or None = random.randint(-100000, 100000)):

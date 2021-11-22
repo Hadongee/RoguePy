@@ -36,5 +36,8 @@ class Entity :
         for component in self.components:
             if type(component) == component_type:
                 return component
+        for component in self.components:
+            if issubclass(type(component), component_type):
+                return component
         return None
 

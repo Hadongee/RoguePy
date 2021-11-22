@@ -14,7 +14,6 @@ class Digable (Component) :
         game.del_entity(self.entity)
         for entity in self.entities_dropped:
             if isinstance(entity, Entity):
-                print("Creating new entity")
                 new_entity = copy.deepcopy(entity)
                 new_entity.get_component(Position).__init__(self.position.x, self.position.y, parent=new_entity)
                 new_entity.get_component(Position).on_add_component()

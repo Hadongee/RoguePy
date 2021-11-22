@@ -1,3 +1,4 @@
+from components.inventory import Inventory
 import tcod
 import random
 import copy
@@ -6,6 +7,7 @@ from .actions import Action, EscapeAction, MovementAction
 from .input_handlers import EventHandler
 from .settings_handler import Settings, SettingsHandler
 from .gamestate import GameState
+from .inventory_renderer import InventoryRenderer
 from entities.entity import Entity
 from entities.player import Player
 from entities.entity import Entity
@@ -50,6 +52,9 @@ class Game :
         self.add_entity(Player(self, spawnpoint[0], spawnpoint[1]))
         self.player = self.entities[len(self.entities) - 1]
         
+        self.inventory_renderer = InventoryRenderer(self.player.get_component(Inventory), self)
+        self.inventory_renderer.bind()
+        
         self.add_entity(Cursor(self, int(self.game_width/2), int(self.game_height/2)))
 
     def add_entity (self, entity : Entity):
@@ -89,6 +94,10 @@ class Game :
                         entity.update(self)
                     for entity in self.entities:
                         entity.late_update(self)
+                else:
+                    if self.gamestate == GameState.INVENTORY:
+                        self.root_console.clear()
+                        self.inventory_renderer.display_inventory()
                 
                 self.root_console.print(x=0, y=self.screen_height-5, string=f"Health: ", fg=[255, 0, 0], bg=[0, 0, 0])
                 self.root_console.print(x=8, y=self.screen_height-5, string=f"{self.player.get_component(PlayerStats).health}", fg=[255, 255, 255], bg=[0, 0, 0])

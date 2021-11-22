@@ -18,7 +18,6 @@ class CursorLook (Component):
                 description = entity_at_pos.description
             else:
                 description = "???"
-            print(f"lookin at {self.position.x}, {self.position.y}, entity={entity_at_pos}, description={description}")
             game.root_console.print(x=0, y=game.screen_height-4, string=f"{description}", fg=[255, 255, 255], bg=[0, 0, 0])
         else:
             game.root_console.print(x=0, y=game.screen_height-4, string=f"ERROR: NO ENTITY", fg=[255, 255, 255], bg=[0, 0, 0])

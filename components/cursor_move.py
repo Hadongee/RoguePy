@@ -1,6 +1,6 @@
 from .component import Component
 from .position import Position
-from engine.actions import Action, CursorMovementAction, DigMovementAction, DigToggleAction, LookToggleAction
+from engine.actions import Action, PickupToggleAction, CursorMovementAction, DigMovementAction, DigToggleAction, LookToggleAction, PickupMovementAction
 from entities.entity import Entity
 from engine.gamestate import GameState
 
@@ -14,20 +14,18 @@ class CursorMove (Component):
         if self.position.x + action.dx >= 0 and self.position.x + action.dx < self.game.game_width and self.position.y + action.dy >= 0 and self.position.y + action.dy < self.game.game_height:
             self.position.move(action.dx, action.dy)
             
-    def handler_DigMovementAction (self, action : DigMovementAction):
+    def handler_AdjacentMovementAction (self, action):
         player_pos = self.game.player.get_component(Position)
         self.position.set(player_pos.x + action.dx, player_pos.y + action.dy)
         
-    def handler_DigToggleAction (self, action : DigToggleAction):
-        player_pos = self.game.player.get_component(Position)
-        self.position.set(player_pos.x, player_pos.y)
-    
-    def handler_LookToggleAction (self, action : LookToggleAction):
+    def handler_ResetPosition (self, action : DigToggleAction):
         player_pos = self.game.player.get_component(Position)
         self.position.set(player_pos.x, player_pos.y)
 
     def bind (self):
         Action.add_action(CursorMovementAction, self.handler_CursorMovementAction)
-        Action.add_action(DigMovementAction, self.handler_DigMovementAction)
-        Action.add_action(DigToggleAction, self.handler_DigToggleAction)
-        Action.add_action(LookToggleAction, self.handler_LookToggleAction)
+        Action.add_action(DigMovementAction, self.handler_AdjacentMovementAction)
+        Action.add_action(PickupMovementAction, self.handler_AdjacentMovementAction)
+        Action.add_action(DigToggleAction, self.handler_ResetPosition)
+        Action.add_action(LookToggleAction, self.handler_ResetPosition)
+        Action.add_action(PickupToggleAction, self.handler_ResetPosition)

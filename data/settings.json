@@ -1,9 +1,11 @@
 {
-    "screen_width": 70,
-    "screen_height": 70,
+    "screen_width": 50,
+    "screen_height": 50,
     "tilesheet": "data/Haowan_Curses_1440x450.png",
     "tilesheet_width": 16,
     "tilesheet_height": 16,
     "title": "Journey Into Antathalon",
-    "vsync": true
+    "vsync": true,
+    "max_health": 100,
+    "max_energy": 1000
 }

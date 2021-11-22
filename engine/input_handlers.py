@@ -4,7 +4,7 @@ from enum import Enum
 import tcod.event
 from tcod.event import KeySym
 
-from .actions import Action, DigAction, EscapeAction, MovementAction, WaitAction, DigToggleAction, LookToggleAction, CursorMovementAction, DigMovementAction
+from .actions import Action, DigAction, EscapeAction, InventoryMoveAction, MovementAction, WaitAction, DigToggleAction, LookToggleAction, CursorMovementAction, DigMovementAction, PickupAction, PickupToggleAction, PickupMovementAction, InventoryOpenAction, InventoryCloseAction
 
 class EventHandler(tcod.event.EventDispatch[Action]):
 
@@ -40,6 +40,14 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             elif key == KeySym.d:
                 action = DigToggleAction()
                 self.state = EventHandlerState.DIG
+                
+            elif key == KeySym.p:
+                action = PickupToggleAction()
+                self.state = EventHandlerState.PICKUP
+                
+            elif key == KeySym.i:
+                action = InventoryOpenAction()
+                self.state = EventHandlerState.INVENTORY
 
             elif key == KeySym.ESCAPE:
                 action = EscapeAction()
@@ -73,7 +81,32 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             elif key == KeySym.RETURN:
                 action = DigAction()
                 self.state = EventHandlerState.MAIN
-        
+        elif self.state == EventHandlerState.PICKUP:
+            if key == KeySym.UP:
+                action = PickupMovementAction(dx=0, dy=-1)
+            elif key == KeySym.DOWN:
+                action = PickupMovementAction(dx=0, dy=1)
+            elif key == KeySym.LEFT:
+                action = PickupMovementAction(dx=-1, dy=0)
+            elif key == KeySym.RIGHT:
+                action = PickupMovementAction(dx=1, dy=0)
+                
+            elif key == KeySym.ESCAPE:
+                action = PickupToggleAction()
+                self.state = EventHandlerState.MAIN
+
+            elif key == KeySym.RETURN:
+                action = PickupAction()
+                self.state = EventHandlerState.MAIN
+        elif self.state == EventHandlerState.INVENTORY:
+            if key == KeySym.UP:
+                action = InventoryMoveAction(change=-1)
+            elif key == KeySym.DOWN:
+                action = InventoryMoveAction(change=1)
+            
+            elif key == KeySym.ESCAPE:
+                action = InventoryCloseAction()
+                self.state = EventHandlerState.MAIN
         if action != None:
             self.update_game_entities = action.update_game_entities
         
@@ -84,4 +117,5 @@ class EventHandlerState (Enum):
     MAIN = 0
     LOOK = 1
     DIG = 2
-    
+    PICKUP = 3
+    INVENTORY = 4
