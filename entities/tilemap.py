@@ -3,17 +3,15 @@ from entities.tile_grass import GrassTile
 from entities.entity import Entity
 from components.entity_map import EntityMap
 from components.position import Position
-from .tile import Tile
 from .tile_stone import StoneTile
 from .tile_bedrock import BedrockTile
-from .tile_gold import GoldTile
 
 import random
 
 class Tilemap (Entity):
     def __init__ (self, game, center_x : int, center_y : int, width : int, height : int):
         super().__init__()
-        self.tilemap = Tilemap.generate_tilemap(width, height, 0.575, 8, 4, 5, 0.025)
+        self.tilemap = Tilemap.generate_tilemap(width, height, 0.575, 8, 4, 5, 0.05)
         self.add_component(Position(center_x, center_y))
         self.add_component(EntityMap(game, self.get_component(Position), width, height, EntityMap.MAPTYPE_MULTIMAP([StoneTile(), GrassTile(), BedrockTile(), EnergiziumTile()], self.tilemap)))
     

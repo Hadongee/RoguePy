@@ -4,7 +4,7 @@ from enum import Enum
 import tcod.event
 from tcod.event import KeySym
 
-from .actions import Action, DigAction, EscapeAction, InventoryMoveAction, MovementAction, WaitAction, DigToggleAction, LookToggleAction, CursorMovementAction, DigMovementAction, PickupAction, PickupToggleAction, PickupMovementAction, InventoryOpenAction, InventoryCloseAction
+from .actions import Action, DigAction, EscapeAction, InventorySelectAction, InventoryMoveAction, InventoryTabAction, MovementAction, WaitAction, DigToggleAction, LookToggleAction, CursorMovementAction, DigMovementAction, PickupAction, PickupToggleAction, PickupMovementAction, InventoryOpenAction, InventoryCloseAction
 
 class EventHandler(tcod.event.EventDispatch[Action]):
 
@@ -103,6 +103,11 @@ class EventHandler(tcod.event.EventDispatch[Action]):
                 action = InventoryMoveAction(change=-1)
             elif key == KeySym.DOWN:
                 action = InventoryMoveAction(change=1)
+            elif key == KeySym.LEFT or key == KeySym.RIGHT:
+                action = InventoryTabAction()
+            
+            elif key == KeySym.RETURN:
+                action = InventorySelectAction()
             
             elif key == KeySym.ESCAPE:
                 action = InventoryCloseAction()

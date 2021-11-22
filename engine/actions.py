@@ -66,6 +66,14 @@ class InventoryMoveAction (Action):
         super().__init__(False)
         
         self.change = change
+        
+class InventoryTabAction (Action):
+    def __init__(self):
+        super().__init__(False)
+        
+class InventorySelectAction (Action):
+    def __init__ (self):
+        super().__init__(False)
 
 class DigMovementAction (Action):
     def __init__(self, dx: int, dy: int):

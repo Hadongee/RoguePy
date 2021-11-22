@@ -9,9 +9,14 @@ class Inventory (Component):
         self.items = list()
         
     def add_item (self, item):
-        if len(self.items) < self.max_slots:
-            # Add item
-            self.items.append(item)
-            return True
+        for _item in self.items:
+            if type(item) == type(_item["item"]) and _item["stack_size"] < _item["item"].maximum_stack:
+                _item["stack_size"] += 1
+                break
         else:
-            return False
+            if len(self.items) < self.max_slots:
+                # Add item
+                self.items.append({"item":item, "stack_size":1})
+                return True
+            else:
+                return False
