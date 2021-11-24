@@ -3,4 +3,4 @@ from .item_actions import DropItemAction
 
 class RawStoneItem (Item):
     def __init__ (self):
-        super().__init__("Raw Stone Boulder", 1, [DropItemAction()], fg=[100, 100, 100], character='o')
+        super().__init__("Raw Stone Boulder", 1, [], fg=[100, 100, 100], character='o')

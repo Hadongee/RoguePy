@@ -2,6 +2,7 @@ from components.inventory import Inventory
 from engine.actions import Action, InventoryOpenAction, InventoryCloseAction, InventoryMoveAction, InventorySelectAction, InventoryTabAction
 from engine.gamestate import GameState
 from engine.input_handlers import EventHandlerState
+from items.equipment_item import EquipmentItem
 
 class InventoryRenderer ():
     def __init__ (self, inventory : Inventory, game):
@@ -9,7 +10,7 @@ class InventoryRenderer ():
         self.game = game
         self.item_selected = 0
         self.item_action_selected = 0
-        self.left_percentage = 0.6
+        self.left_percentage = 0.7
         self.center_line_pos = (int)(self.game.game_width * self.left_percentage)
         self.right_start = self.center_line_pos + 1
         self.selecting_items = True
@@ -19,7 +20,7 @@ class InventoryRenderer ():
         self.game.root_console.print(x=self.center_line_pos+1, y=1, string=f"Item Actions", fg=[255, 255, 255], bg=[0, 0, 0])
         
         for item_index in range(len(self.inventory.items)):
-            self.game.root_console.print(x=1, y=3 + item_index, string=f"    {self.inventory.items[item_index]['item'].name} ({self.inventory.items[item_index]['stack_size']})", fg=[255, 255, 255], bg=[0, 0, 0])
+            self.game.root_console.print(x=1, y=3 + item_index, string=f"    {self.inventory.items[item_index]['item'].name} " + (f"({self.inventory.items[item_index]['stack_size']})" if self.inventory.items[item_index]['stack_size'] > 1 else f"") + (f"E({self.inventory.items[item_index]['item'].equipped.name[0]})" if isinstance(self.inventory.items[item_index]['item'], EquipmentItem) and self.inventory.items[item_index]['item'].equipped != None else ""), fg=[255, 255, 255], bg=[0, 0, 0])
             self.game.root_console.print(x=3, y=3 + item_index, string=f"{self.inventory.items[item_index]['item'].character}", fg=self.inventory.items[item_index]['item'].fg, bg=self.inventory.items[item_index]['item'].bg)
         if len(self.inventory.items) > 0 and self.selecting_items:
             self.game.root_console.print(x=1, y=3 + self.item_selected, string=f">", fg=[255, 255, 255], bg=[0, 0, 0])

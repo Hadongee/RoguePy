@@ -1,6 +1,14 @@
+from components.equipment import Equipment
 from components.inventory import Inventory
 from components.player_stats import PlayerStats
 from engine.gamestate import GameState
+from items.basic_energy_pistol import BasicEnergyPistolItem
+from items.basic_plasma_cutter import BasicPlasmaCutterItem
+from items.basic_power_armour_body import BasicPowerArmourBodyItem
+from items.basic_power_armour_feet import BasicPowerArmourFeetItem
+from items.basic_power_armour_helmet import BasicPowerArmourHelmetItem
+from items.basic_power_armour_legs import BasicPowerArmourLegsItem
+from items.equipment_slot import EquipmentSlot
 from .entity import Entity
 from components.position import Position
 from components.renderer import Renderer
@@ -25,4 +33,20 @@ class Player (Entity):
         self.add_component(ActionComponentEnabler([Vision], DigAction))
         self.add_component(ActionComponentEnabler([Vision], PickupToggleAction))
         self.add_component(ActionComponentEnabler([Vision], PickupAction))
-        self.add_component(Inventory(24))
+        self.add_component(Inventory(25))
+        self.add_component(Equipment())
+        
+        inventory = self.get_component(Inventory)
+        equipment = self.get_component(Equipment)
+        inventory.add_item(BasicPowerArmourHelmetItem())
+        equipment.equip_item(inventory.items[len(inventory.items)-1]['item'], EquipmentSlot.HEAD)
+        inventory.add_item(BasicPowerArmourBodyItem())
+        equipment.equip_item(inventory.items[len(inventory.items)-1]['item'], EquipmentSlot.TORSO)
+        inventory.add_item(BasicPowerArmourLegsItem())
+        equipment.equip_item(inventory.items[len(inventory.items)-1]['item'], EquipmentSlot.LEGS)
+        inventory.add_item(BasicPowerArmourFeetItem())
+        equipment.equip_item(inventory.items[len(inventory.items)-1]['item'], EquipmentSlot.FEET)
+        inventory.add_item(BasicEnergyPistolItem())
+        equipment.equip_item(inventory.items[len(inventory.items)-1]['item'], EquipmentSlot.RIGHT_HAND)
+        inventory.add_item(BasicPlasmaCutterItem())
+        equipment.equip_item(inventory.items[len(inventory.items)-1]['item'], EquipmentSlot.LEFT_HAND)

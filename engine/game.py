@@ -1,4 +1,5 @@
 from components.inventory import Inventory
+from entities.drop_pod import DropPod
 import tcod
 import random
 import copy
@@ -34,7 +35,7 @@ class Game :
 
         self.tileset = tcod.tileset.load_tilesheet(self.settings.tilesheet, self.settings.tilesheet_width, self.settings.tilesheet_height, tcod.tileset.CHARMAP_CP437)
 
-        self.event_handler = EventHandler()
+        self.event_handler = EventHandler(self)
         self.gamestate = GameState.PLAYERTURN
 
         self.entities = list()
@@ -56,6 +57,11 @@ class Game :
         self.inventory_renderer.bind()
         
         self.add_entity(Cursor(self, int(self.game_width/2), int(self.game_height/2)))
+        
+        drop_spawnpoint = random.choice(biggest_cave)
+        while drop_spawnpoint == spawnpoint:
+            drop_spawnpoint = random.choice(biggest_cave)
+        self.add_entity(DropPod(drop_spawnpoint[0], drop_spawnpoint[1]))
 
     def add_entity (self, entity : Entity):
         self.entities.append(entity)

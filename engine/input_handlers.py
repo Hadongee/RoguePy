@@ -1,6 +1,9 @@
 from typing import Optional
 from enum import Enum
 
+from components.equipment import Equipment
+from items.equipment_slot import EquipmentSlot
+
 import tcod.event
 from tcod.event import KeySym
 
@@ -8,9 +11,10 @@ from .actions import Action, DigAction, EscapeAction, InventorySelectAction, Inv
 
 class EventHandler(tcod.event.EventDispatch[Action]):
 
-    def __init__ (self):
+    def __init__ (self, game):
         self.state = EventHandlerState.MAIN
         self.update_game_entities = True
+        self.game = game
 
     def ev_quit(self, event: tcod.event.Quit) -> Optional[Action]:
         raise SystemExit()
@@ -33,13 +37,27 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             elif key == KeySym.PERIOD:
                 action = WaitAction()
             
+            elif key == KeySym.q:
+                left_hand_item = self.game.player.get_component(Equipment).slots[EquipmentSlot.LEFT_HAND.name]
+                if left_hand_item != None:
+                    action = left_hand_item.use_action
+                    if left_hand_item.event_handler_state != None:
+                        self.state = left_hand_item.event_handler_state
+            
+            elif key == KeySym.e:
+                right_hand_item = self.game.player.get_component(Equipment).slots[EquipmentSlot.RIGHT_HAND.name]
+                if right_hand_item != None:
+                    action = right_hand_item.use_action
+                    if right_hand_item.event_handler_state != None:
+                        self.state = right_hand_item.event_handler_state
+            
             elif key == KeySym.l:
                 action = LookToggleAction()
                 self.state = EventHandlerState.LOOK
                 
-            elif key == KeySym.d:
-                action = DigToggleAction()
-                self.state = EventHandlerState.DIG
+            # elif key == KeySym.m:
+            #    action = DigToggleAction()
+            #    self.state = EventHandlerState.DIG
                 
             elif key == KeySym.p:
                 action = PickupToggleAction()
