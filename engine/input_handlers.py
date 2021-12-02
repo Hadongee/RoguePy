@@ -7,7 +7,7 @@ from items.equipment_slot import EquipmentSlot
 import tcod.event
 from tcod.event import KeySym
 
-from .actions import Action, DigAction, EscapeAction, InventorySelectAction, InventoryMoveAction, InventoryTabAction, MovementAction, WaitAction, DigToggleAction, LookToggleAction, CursorMovementAction, DigMovementAction, PickupAction, PickupToggleAction, PickupMovementAction, InventoryOpenAction, InventoryCloseAction
+from .actions import Action, AttackAction, AttackToggleAction, DigAction, EscapeAction, InventorySelectAction, InventoryMoveAction, InventoryTabAction, MovementAction, WaitAction, DigToggleAction, LookToggleAction, CursorMovementAction, DigMovementAction, PickupAction, PickupToggleAction, PickupMovementAction, InventoryOpenAction, InventoryCloseAction
 
 class EventHandler(tcod.event.EventDispatch[Action]):
 
@@ -54,10 +54,6 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             elif key == KeySym.l:
                 action = LookToggleAction()
                 self.state = EventHandlerState.LOOK
-                
-            # elif key == KeySym.m:
-            #    action = DigToggleAction()
-            #    self.state = EventHandlerState.DIG
                 
             elif key == KeySym.p:
                 action = PickupToggleAction()
@@ -130,8 +126,26 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             elif key == KeySym.ESCAPE:
                 action = InventoryCloseAction()
                 self.state = EventHandlerState.MAIN
+        elif self.state == EventHandlerState.ATTACK:
+            if key == KeySym.UP:
+                action = CursorMovementAction(dx=0, dy=-1)
+            elif key == KeySym.DOWN:
+                action = CursorMovementAction(dx=0, dy=1)
+            elif key == KeySym.LEFT:
+                action = CursorMovementAction(dx=-1, dy=0)
+            elif key == KeySym.RIGHT:
+                action = CursorMovementAction(dx=1, dy=0)
+                
+            elif key == KeySym.ESCAPE:
+                action = AttackToggleAction()
+                self.state = EventHandlerState.MAIN
+
+            elif key == KeySym.RETURN:
+                action = AttackAction()
+                self.state = EventHandlerState.MAIN
         if action != None:
             self.update_game_entities = action.update_game_entities
+            self.game.update_enemies = action.update_enemies
         
         # No valid key was pressed
         return action
@@ -142,3 +156,4 @@ class EventHandlerState (Enum):
     DIG = 2
     PICKUP = 3
     INVENTORY = 4
+    ATTACK = 5

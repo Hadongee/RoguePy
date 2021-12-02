@@ -11,7 +11,7 @@ import random
 class Tilemap (Entity):
     def __init__ (self, game, center_x : int, center_y : int, width : int, height : int):
         super().__init__()
-        self.tilemap = Tilemap.generate_tilemap(width, height, 0.575, 8, 4, 5, 0.05)
+        self.tilemap = Tilemap.generate_tilemap(width, height, 0.575, 8, 4, 5, 0.015)
         self.add_component(Position(center_x, center_y))
         self.add_component(EntityMap(game, self.get_component(Position), width, height, EntityMap.MAPTYPE_MULTIMAP([StoneTile(), GrassTile(), BedrockTile(), EnergiziumTile()], self.tilemap)))
     

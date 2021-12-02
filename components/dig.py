@@ -12,7 +12,7 @@ class Dig (Component):
         super().__init__(parent, update_on_gamestate)
         self.position = position
         self.game = game
-        self.energy_for_dig = 10
+        self.energy_for_dig = 3
 
     def handler_DigAction (self, action : DigAction):
         if self.game.player.get_component(PlayerStats).energy >= self.energy_for_dig:

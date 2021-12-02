@@ -1,6 +1,6 @@
 from .component import Component
 from .position import Position
-from engine.actions import Action, PickupToggleAction, CursorMovementAction, DigMovementAction, DigToggleAction, LookToggleAction, PickupMovementAction
+from engine.actions import Action, AttackToggleAction, PickupToggleAction, CursorMovementAction, DigMovementAction, DigToggleAction, LookToggleAction, PickupMovementAction
 from entities.entity import Entity
 from engine.gamestate import GameState
 
@@ -18,7 +18,7 @@ class CursorMove (Component):
         player_pos = self.game.player.get_component(Position)
         self.position.set(player_pos.x + action.dx, player_pos.y + action.dy)
         
-    def handler_ResetPosition (self, action : DigToggleAction):
+    def handler_ResetPosition (self, action):
         player_pos = self.game.player.get_component(Position)
         self.position.set(player_pos.x, player_pos.y)
 
@@ -27,5 +27,6 @@ class CursorMove (Component):
         Action.add_action(DigMovementAction, self.handler_AdjacentMovementAction)
         Action.add_action(PickupMovementAction, self.handler_AdjacentMovementAction)
         Action.add_action(DigToggleAction, self.handler_ResetPosition)
+        Action.add_action(AttackToggleAction, self.handler_ResetPosition)
         Action.add_action(LookToggleAction, self.handler_ResetPosition)
         Action.add_action(PickupToggleAction, self.handler_ResetPosition)

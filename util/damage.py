@@ -6,7 +6,7 @@ class Damage ():
         self.max = max
         
     def get_random (self):
-        return random.randint(min, max)
+        return random.randint(self.min, self.max)
     
     def get_min (self):
         return min

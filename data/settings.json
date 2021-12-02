@@ -7,5 +7,5 @@
     "title": "Journey Into Antathalon",
     "vsync": true,
     "max_health": 100,
-    "max_energy": 1000
+    "max_energy": 100
 }

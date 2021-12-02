@@ -1,13 +1,8 @@
 from components.equipment import Equipment
+from components.health import Health
 from components.inventory import Inventory
 from components.player_stats import PlayerStats
 from engine.gamestate import GameState
-from items.basic_energy_pistol import BasicEnergyPistolItem
-from items.basic_plasma_cutter import BasicPlasmaCutterItem
-from items.basic_power_armour_body import BasicPowerArmourBodyItem
-from items.basic_power_armour_feet import BasicPowerArmourFeetItem
-from items.basic_power_armour_helmet import BasicPowerArmourHelmetItem
-from items.basic_power_armour_legs import BasicPowerArmourLegsItem
 from items.equipment_slot import EquipmentSlot
 from .entity import Entity
 from components.position import Position
@@ -15,7 +10,8 @@ from components.renderer import Renderer
 from components.player_move import PlayerMove
 from components.vision import Vision
 from components.action_component_enabler import ActionComponentEnabler
-from engine.actions import DigToggleAction, LookToggleAction, DigAction, PickupToggleAction, PickupAction
+from components.solid import Solid
+from engine.actions import AttackAction, AttackToggleAction, DigToggleAction, LookToggleAction, DigAction, PickupToggleAction, PickupAction
 from engine.settings_handler import SettingsHandler
 
 class Player (Entity):
@@ -28,13 +24,23 @@ class Player (Entity):
         self.add_component(PlayerMove(self.get_component(Position)))
         self.add_component(Vision(self.get_component(Position)))
         self.add_component(PlayerStats(settings.max_health, settings.max_energy))
+        self.add_component(Health(100))
         self.add_component(ActionComponentEnabler([Vision], LookToggleAction))
         self.add_component(ActionComponentEnabler([Vision], DigToggleAction))
         self.add_component(ActionComponentEnabler([Vision], DigAction))
         self.add_component(ActionComponentEnabler([Vision], PickupToggleAction))
         self.add_component(ActionComponentEnabler([Vision], PickupAction))
+        self.add_component(ActionComponentEnabler([Vision], AttackToggleAction))
+        self.add_component(ActionComponentEnabler([Vision], AttackAction))
         self.add_component(Inventory(25))
         self.add_component(Equipment())
+        
+        from items.basic_energy_pistol import BasicEnergyPistolItem
+        from items.basic_plasma_cutter import BasicPlasmaCutterItem
+        from items.basic_power_armour_body import BasicPowerArmourBodyItem
+        from items.basic_power_armour_feet import BasicPowerArmourFeetItem
+        from items.basic_power_armour_helmet import BasicPowerArmourHelmetItem
+        from items.basic_power_armour_legs import BasicPowerArmourLegsItem
         
         inventory = self.get_component(Inventory)
         equipment = self.get_component(Equipment)

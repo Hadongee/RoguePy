@@ -1,9 +1,10 @@
 from components.digable import Digable
+from components.enemy_controller import EnemyController
 from components.pickupable import Pickupable
 from components.player_stats import PlayerStats
 from .renderer import Renderer
 from .position import Position
-from engine.actions import Action, DigToggleAction, DigAction, LookToggleAction, PickupAction, PickupToggleAction
+from engine.actions import Action, AttackAction, AttackToggleAction, DigToggleAction, DigAction, LookToggleAction, PickupAction, PickupToggleAction
 
 class CursorRenderer (Renderer):
     def __init__ (self, position : Position):
@@ -13,6 +14,7 @@ class CursorRenderer (Renderer):
         self.invalid_fg = [255, 0, 0]
         self.mining = False
         self.pickup = False
+        self.attacking = False
     
     def update (self, game):
         super().update(game)
@@ -33,12 +35,22 @@ class CursorRenderer (Renderer):
                     break
             else:
                 self.fg = self.invalid_fg
+        if self.attacking:
+            for entity in Position.entities_at_position[(self.position.x, self.position.y)]:
+                if entity.get_component(EnemyController) != None:
+                    self.fg = self.valid_fg
+                    break
+            else:
+                self.fg = self.invalid_fg
         
     def handler_DigToggleAction (self, action):
         self.mining = not self.mining
         
     def handler_PickupToggleAction (self, action):
         self.pickup = not self.pickup
+        
+    def handler_AttackToggleAction (self, action):
+        self.attacking = not self.attacking
     
     def handler_LookToggleAction (self, action : LookToggleAction):
         self.fg = self.default_fg
@@ -46,6 +58,8 @@ class CursorRenderer (Renderer):
     def bind (self):
         Action.add_action(DigToggleAction, self.handler_DigToggleAction)
         Action.add_action(DigAction, self.handler_DigToggleAction)
+        Action.add_action(AttackToggleAction, self.handler_AttackToggleAction)
+        Action.add_action(AttackAction, self.handler_AttackToggleAction)
         Action.add_action(PickupToggleAction, self.handler_PickupToggleAction)
         Action.add_action(PickupAction, self.handler_PickupToggleAction)
         Action.add_action(LookToggleAction, self.handler_LookToggleAction)

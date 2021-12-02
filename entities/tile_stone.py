@@ -11,4 +11,4 @@ class StoneTile (SolidTile):
         self.description = "Stone Wall"
         self.get_component(Renderer).character="▓"
         self.get_component(Renderer).fg=[75, 75, 75]
-        self.get_component(Digable).entities_dropped = [(StoneFloorTile(), 1), (ItemEntity(RawStoneItem()), 0.4)]
+        self.get_component(Digable).entities_dropped = [(StoneFloorTile(), 1), (ItemEntity(RawStoneItem()), 0.15)]
