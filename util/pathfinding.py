@@ -1,6 +1,7 @@
 from components.position import Position
 from components.solid import Solid
 import math
+from components.unmovable import Unmovable
 
 from entities.player import Player
 
@@ -64,6 +65,9 @@ class Pathfinding ():
                     distance = 1
                     for _entity in Position.entities_at_position[(current[0] + dx), (current[1] + dy)]:
                         if _entity.get_component(Solid) != None:
+                            distance = math.inf
+                            break
+                        if _entity.get_component(Unmovable) != None:
                             distance = math.inf
                             break
                     tentative_gscore = gscore[current[0] + current[1] * width] + distance

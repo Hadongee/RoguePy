@@ -1,5 +1,6 @@
 from components.health import Health
 from components.position import Position
+from engine.animation import Animation, SingleAnimation
 from .component import Component
 from entities.entity import Entity
 from engine.gamestate import GameState
@@ -19,10 +20,13 @@ class MeleeAttack (Component):
         else:
             return False
     
-    def attack (self, x : int, y : int, health : Health):
+    def attack (self, game, x : int, y : int, health : Health):
         if self.can_attack(x, y):
             entities = Position.entities_at_position[(x, y)]
             for entity in entities:
                 if entity.get_component(Health) != None:
-                    entity.get_component(Health).deal_damage(self.damage.get_random())
+                    damage = self.damage.get_random()
+                    entity.get_component(Health).deal_damage(damage)
+                    game.add_to_log(f"{self.entity.description} attacked you for {damage}")
+                    #Animation.add_animation(SingleAnimation((x, y), '/', [255, 0, 0]))
                     break

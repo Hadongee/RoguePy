@@ -63,7 +63,7 @@ class Vision (Component):
         if entity_enemy != None:
             entity_enemy.seen = True
             
-    def raycast (self, other_x : float, other_y : float, return_all : bool):
+    def raycast (self, other_x : float, other_y : float, return_all : bool, ignore_solid : bool or None = False):
         current_x = self.position.x
         current_y = self.position.y
         
@@ -93,13 +93,13 @@ class Vision (Component):
             dist_next_x = math.sqrt((next_x-my_pos_x)**2 + (next_x_y-my_pos_y)**2)
             dist_next_y = math.sqrt((next_y_x-my_pos_x)**2 + (next_y-my_pos_y)**2)
 
-            if abs(dist_next_x - dist_next_y) < 0.001:
+            if abs(dist_next_x - dist_next_y) < 0.01:
                 tile_passthrough.append((next_x, next_y))
                 for entity in Position.entities_at_position[(next_x, next_y)]:
                     if isinstance(entity, BedrockTile):
                         hit_solid += 1000
                         break
-                    if entity.get_component(Solid) != None:
+                    if entity.get_component(Solid) != None and not ignore_solid:
                         hit_solid += 1
                         break
                 current_x = next_x
@@ -113,7 +113,7 @@ class Vision (Component):
                     if isinstance(entity, BedrockTile):
                         hit_solid += 1000
                         break
-                    if entity.get_component(Solid) != None:
+                    if entity.get_component(Solid) != None and not ignore_solid:
                         hit_solid += 1
                         break
                 current_x = next_x
@@ -126,7 +126,7 @@ class Vision (Component):
                     if isinstance(entity, BedrockTile):
                         hit_solid += 1000
                         break
-                    if entity.get_component(Solid) != None:
+                    if entity.get_component(Solid) != None and not ignore_solid:
                         hit_solid += 1
                         break
                 current_y = next_y

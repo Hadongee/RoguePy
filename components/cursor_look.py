@@ -18,6 +18,6 @@ class CursorLook (Component):
                 description = entity_at_pos.description
             else:
                 description = "???"
-            game.root_console.print(x=0, y=game.screen_height-4, string=f"{description}", fg=[255, 255, 255], bg=[0, 0, 0])
+            game.root_console.print(x=0, y=game.screen_height-1, string=f"{description}", fg=[255, 255, 255], bg=[0, 0, 0])
         else:
-            game.root_console.print(x=0, y=game.screen_height-4, string=f"ERROR: NO ENTITY", fg=[255, 255, 255], bg=[0, 0, 0])
+            game.root_console.print(x=0, y=game.screen_height-1, string=f"ERROR: NO ENTITY", fg=[255, 255, 255], bg=[0, 0, 0])

@@ -1,3 +1,5 @@
+from components.position import Position
+from engine.animation import Animation, SingleAnimation
 from .component import Component
 from entities.entity import Entity
 from engine.gamestate import GameState
@@ -11,6 +13,7 @@ class Health (Component):
     def deal_damage(self, damage : int):
         from engine.game import Game
         self.health -= damage
+        Animation.add_animation(SingleAnimation((self.entity.get_component(Position).x, self.entity.get_component(Position).y), '/', [255, 0, 0]))
         if self.health <= 0:
             Game.instance.del_entity(self.entity)
             from entities.player import Player

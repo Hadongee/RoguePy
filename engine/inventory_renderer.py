@@ -11,7 +11,7 @@ class InventoryRenderer ():
         self.item_selected = 0
         self.item_action_selected = 0
         self.left_percentage = 0.7
-        self.center_line_pos = (int)(self.game.game_width * self.left_percentage)
+        self.center_line_pos = (int)(self.game.screen_width * self.left_percentage)
         self.right_start = self.center_line_pos + 1
         self.selecting_items = True
         
@@ -31,25 +31,25 @@ class InventoryRenderer ():
             if len(self.inventory.items[self.item_selected]["item"].item_actions) > 0 and not self.selecting_items:
                 self.game.root_console.print(x=self.right_start, y=3 + self.item_action_selected, string=f">", fg=[255, 255, 255], bg=[0, 0, 0])
         
-        for i in range(self.game.game_height):
+        for i in range(self.game.screen_height):
             self.game.root_console.print(x=self.center_line_pos, y=i, string="║", fg=[200, 200, 200], bg=[0, 0, 0])
             self.game.root_console.print(x=0, y=i, string="║", fg=[200, 200, 200], bg=[0, 0, 0])
-            self.game.root_console.print(x=self.game.game_width-1, y=i, string="║", fg=[200, 200, 200], bg=[0, 0, 0])
+            self.game.root_console.print(x=self.game.screen_width-1, y=i, string="║", fg=[200, 200, 200], bg=[0, 0, 0])
         
-        for i in range(self.game.game_width):
+        for i in range(self.game.screen_width):
             self.game.root_console.print(x=i, y=0, string="═", fg=[200, 200, 200], bg=[0, 0, 0])
             self.game.root_console.print(x=i, y=2, string="═", fg=[200, 200, 200], bg=[0, 0, 0])
-            self.game.root_console.print(x=i, y=self.game.game_height-1, string="═", fg=[200, 200, 200], bg=[0, 0, 0])
+            self.game.root_console.print(x=i, y=self.game.screen_height-1, string="═", fg=[200, 200, 200], bg=[0, 0, 0])
         
-        self.game.root_console.print(x=0, y=self.game.game_height-1, string="╚", fg=[200, 200, 200], bg=[0, 0, 0])
-        self.game.root_console.print(x=self.game.game_width-1, y=self.game.game_height-1, string="╝", fg=[200, 200, 200], bg=[0, 0, 0])
+        self.game.root_console.print(x=0, y=self.game.screen_height-1, string="╚", fg=[200, 200, 200], bg=[0, 0, 0])
+        self.game.root_console.print(x=self.game.screen_width-1, y=self.game.screen_height-1, string="╝", fg=[200, 200, 200], bg=[0, 0, 0])
         self.game.root_console.print(x=0, y=0, string="╔", fg=[200, 200, 200], bg=[0, 0, 0])
-        self.game.root_console.print(x=self.game.game_width-1, y=0, string="╗", fg=[200, 200, 200], bg=[0, 0, 0])
+        self.game.root_console.print(x=self.game.screen_width-1, y=0, string="╗", fg=[200, 200, 200], bg=[0, 0, 0])
         self.game.root_console.print(x=self.center_line_pos, y=0, string="╦", fg=[200, 200, 200], bg=[0, 0, 0])
-        self.game.root_console.print(x=self.center_line_pos, y=self.game.game_height-1, string="╩", fg=[200, 200, 200], bg=[0, 0, 0])
+        self.game.root_console.print(x=self.center_line_pos, y=self.game.screen_height-1, string="╩", fg=[200, 200, 200], bg=[0, 0, 0])
         self.game.root_console.print(x=self.center_line_pos, y=2, string="╬", fg=[200, 200, 200], bg=[0, 0, 0])
         self.game.root_console.print(x=0, y=2, string="╠", fg=[200, 200, 200], bg=[0, 0, 0])
-        self.game.root_console.print(x=self.game.game_width-1, y=2, string="╣", fg=[200, 200, 200], bg=[0, 0, 0])
+        self.game.root_console.print(x=self.game.screen_width-1, y=2, string="╣", fg=[200, 200, 200], bg=[0, 0, 0])
     
     def handler_InventoryOpenAction (self, action : InventoryOpenAction):
         self.game.gamestate = GameState.INVENTORY

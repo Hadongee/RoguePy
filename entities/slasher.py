@@ -14,7 +14,7 @@ class Slasher (Entity):
     def __init__ (self, spawn_x : int or None = 0, spawn_y : int or None = 0):
         super().__init__(description="Slasher")
         self.add_component(Position(spawn_x, spawn_y))
-        self.add_component(EnemyRenderer(self.get_component(Position), character="s", fg=[255, 0, 0], non_visible_fg=[50, 0, 0]))
+        self.add_component(EnemyRenderer(self.get_component(Position), character="s", fg=[255, 0, 0], non_visible_fg=[50, 0, 0], render_on_late_update=True))
         self.add_component(EnemyMove(self.get_component(Position), self.get_component(Renderer), 0))
         self.add_component(MeleeAttack(self.get_component(Position), Damage(8, 15), 1.9))
         self.add_component(EnemyController(self.get_component(EnemyMove), self.get_component(MeleeAttack), update_on_gamestate=GameState.ENEMYTURN))

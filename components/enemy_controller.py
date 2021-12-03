@@ -18,6 +18,6 @@ class EnemyController (Component):
         if self.seen:
             player_pos = game.player.get_component(Position)
             if self.melee_attack.can_attack(player_pos.x, player_pos.y):
-                self.melee_attack.attack(player_pos.x, player_pos.y, game.player.get_component(Health))
+                self.melee_attack.attack(game, player_pos.x, player_pos.y, game.player.get_component(Health))
             else:
                 self.enemy_move.move(game)
